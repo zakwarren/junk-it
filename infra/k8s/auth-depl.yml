@@ -16,9 +16,6 @@ spec:
         - name: auth
           image: auth
           imagePullPolicy: Never
-          env:
-            - name: PORT
-              value: 3001
 ---
 apiVersion: v1
 kind: Service
