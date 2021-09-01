@@ -6,7 +6,7 @@ import {
   singoutRouter,
   signupRouter,
 } from "./routes";
-import { errorHandler } from "./middleware/error-handler";
+import { errorHandler } from "./middleware";
 
 const app = express();
 app.use(json());
