@@ -6,6 +6,7 @@ import {
   singoutRouter,
   signupRouter,
 } from "./routes";
+import { NotFoundError } from "./errors";
 import { errorHandler } from "./middleware";
 
 const app = express();
@@ -16,6 +17,10 @@ app.use(rootRoute, currentUserRouter);
 app.use(rootRoute, signinRouter);
 app.use(rootRoute, singoutRouter);
 app.use(rootRoute, signupRouter);
+
+app.all("*", () => {
+  throw new NotFoundError();
+});
 
 app.use(errorHandler);
 
