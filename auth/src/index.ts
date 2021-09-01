@@ -1,9 +1,11 @@
 import express, { json } from "express";
 
-import { currentUserRouter } from "./routes/current-user";
-import { signinRouter } from "./routes/signin";
-import { singoutRouter } from "./routes/signout";
-import { signupRouter } from "./routes/signup";
+import {
+  currentUserRouter,
+  signinRouter,
+  singoutRouter,
+  signupRouter,
+} from "./routes";
 import { errorHandler } from "./middleware/error-handler";
 
 const app = express();
