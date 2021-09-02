@@ -43,3 +43,15 @@ const start = async () => {
 };
 
 start();
+
+process.on("SIGINT", async () => {
+  let error = null;
+  try {
+    await mongoose.disconnect();
+    console.log("Disconnecting from MongoDB");
+  } catch (err) {
+    error = err;
+  }
+  console.log("Exiting");
+  process.exit(error ? 1 : 0);
+});
