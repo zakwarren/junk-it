@@ -16,6 +16,12 @@ spec:
         - name: auth
           image: auth
           imagePullPolicy: Never
+          env:
+            - name: JWT_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: JWT_PRIVATE_KEY
 ---
 apiVersion: v1
 kind: Service
