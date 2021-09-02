@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import "express-async-errors";
 import mongoose from "mongoose";
+import cookieSession from "cookie-session";
 
 import {
   currentUserRouter,
@@ -12,7 +13,10 @@ import { NotFoundError } from "./errors";
 import { errorHandler } from "./middleware";
 
 const app = express();
+// trust proxy as behind nginx, so should trust its traffic
+app.set("trust-proxy", true);
 app.use(json());
+app.use(cookieSession({ signed: false, secure: true }));
 
 const rootRoute = "/api/users";
 app.use(rootRoute, currentUserRouter);
