@@ -15,7 +15,9 @@
   "author": "Zak Warren",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.12.1",
