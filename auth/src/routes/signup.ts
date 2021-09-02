@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 
-import { RequestValidationError } from "../errors";
+import { validateRequest } from "../middleware";
 import { User } from "../models";
 
 const router = Router();
@@ -26,12 +26,8 @@ router.post(
       .isLength({ min: 8, max: 20 })
       .withMessage("Password must be between 8 and 20 characters"),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
     const { email, password } = req.body;
     const user = new User({ email, password });
     await user.save();
