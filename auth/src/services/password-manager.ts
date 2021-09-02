@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 
 const saltRounds = 12;
 
-export class Password {
+export class PasswordManager {
   static async toHash(password: string) {
     return bcrypt.hash(password, saltRounds);
   }
