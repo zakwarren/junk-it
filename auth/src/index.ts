@@ -16,7 +16,12 @@ const app = express();
 // trust proxy as behind nginx, so should trust its traffic
 app.set("trust-proxy", true);
 app.use(json());
-app.use(cookieSession({ signed: false, secure: true }));
+app.use(
+  cookieSession({
+    signed: false,
+    secure: process.env.NODE_ENV === "production",
+  })
+);
 
 const rootRoute = "/api/users";
 app.use(rootRoute, currentUserRouter);

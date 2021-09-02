@@ -17,6 +17,11 @@ spec:
           image: auth
           imagePullPolicy: Never
           env:
+            - name: NODE_ENV
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: NODE_ENV
             - name: JWT_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
