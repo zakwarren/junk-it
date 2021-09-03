@@ -1,12 +1,13 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
-import { app } from "../app";
-
 let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
-  mongo = new MongoMemoryServer();
+  process.env.JWT_PRIVATE_KEY = "test-private-key";
+  process.env.JWT_PUBLIC_KEY = "test-public-key";
+
+  mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
 
   await mongoose.connect(mongoUri);
