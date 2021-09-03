@@ -2,18 +2,26 @@
   "name": "auth",
   "version": "1.0.0",
   "description": "Authentication and user service",
+  "author": "Zak Warren",
+  "license": "BSD-3-Clause",
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
+    "test": "jest --watchAll --no-cache",
     "build": "docker build -t auth ."
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
   },
   "keywords": [
     "microservice",
     "ecommerce",
     "authentication"
   ],
-  "author": "Zak Warren",
-  "license": "BSD-3-Clause",
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-session": "^2.0.43",
