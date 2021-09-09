@@ -1,23 +1,21 @@
 import { useState, FormEvent } from "react";
 import axios from "axios";
 
+import { useRequest } from "../../hooks";
+
 const signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const { doRequest, errors } = useRequest({
+    url: "/api/users/signup",
+    method: "post",
+    body: { email, password },
+  });
 
   const onSumbit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      const response = await axios.post("/api/users/signup", {
-        email,
-        password,
-      });
-      console.log(response.data);
-    } catch (err) {
-      setErrors(err?.response?.data?.errors);
-    }
+    doRequest();
   };
 
   return (
@@ -39,16 +37,7 @@ const signup = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      {errors.length > 0 && (
-        <div className="alert alert-danger">
-          <h4>Something went wrong...</h4>
-          <ul className="my-0">
-            {errors.map((err) => (
-              <li key={err.message}>{err.message}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {errors}
       <button className="btn btn-primary">Sign Up</button>
     </form>
   );
