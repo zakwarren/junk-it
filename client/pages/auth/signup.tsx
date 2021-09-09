@@ -4,12 +4,20 @@ import axios from "axios";
 const signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([]);
 
   const onSumbit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const response = await axios.post("/api/users/signup", { email, password });
-    console.log(response.data);
+    try {
+      const response = await axios.post("/api/users/signup", {
+        email,
+        password,
+      });
+      console.log(response.data);
+    } catch (err) {
+      setErrors(err?.response?.data?.errors);
+    }
   };
 
   return (
@@ -31,6 +39,16 @@ const signup = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+      {errors.length > 0 && (
+        <div className="alert alert-danger">
+          <h4>Something went wrong...</h4>
+          <ul className="my-0">
+            {errors.map((err) => (
+              <li key={err.message}>{err.message}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <button className="btn btn-primary">Sign Up</button>
     </form>
   );
