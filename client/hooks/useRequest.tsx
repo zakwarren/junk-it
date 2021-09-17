@@ -29,9 +29,9 @@ export const useRequest = ({ url, method, body, onSuccess }: Request) => {
     } catch (err) {
       const errors: ValidationError[] = err?.response?.data?.errors || [];
       setErrors(
-        <div className="alert alert-danger">
+        <div className="text-white px-6 py-4 border-0 rounded relative mb-4 bg-yellow-500">
           <h4>Something went wrong...</h4>
-          <ul className="my-0">
+          <ul className="list-disc">
             {errors.map((err) => (
               <li key={err.message}>{err.message}</li>
             ))}
