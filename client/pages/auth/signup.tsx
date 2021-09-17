@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import axios from "axios";
+import Router from "next/router";
 
 import { useRequest } from "../../hooks";
 
@@ -10,6 +10,7 @@ const signup = () => {
     url: "/api/users/signup",
     method: "post",
     body: { email, password },
+    onSuccess: () => Router.push("/"),
   });
 
   const onSumbit = async (event: FormEvent<HTMLFormElement>) => {
