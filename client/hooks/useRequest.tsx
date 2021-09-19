@@ -14,7 +14,7 @@ interface Request {
 }
 
 export const useRequest = ({ url, method, body, onSuccess }: Request) => {
-  const [errors, setErrors] = useState<ReactElement>(null);
+  const [errors, setErrors] = useState<ReactElement | null>(null);
 
   const doRequest = async () => {
     try {
@@ -26,7 +26,7 @@ export const useRequest = ({ url, method, body, onSuccess }: Request) => {
       }
 
       return response.data;
-    } catch (err) {
+    } catch (err: any) {
       const errors: ValidationError[] = err?.response?.data?.errors || [];
       setErrors(
         <div className="text-white px-6 py-4 border-0 rounded relative mb-4 bg-yellow-500">

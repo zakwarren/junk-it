@@ -1,4 +1,4 @@
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextPageContext } from "next";
 import axios from "axios";
 
 const serverSideAxios = axios.create({
@@ -6,7 +6,9 @@ const serverSideAxios = axios.create({
   withCredentials: true,
 });
 
-export const buildClient = ({ req }: { req: NextApiRequest }) => {
-  serverSideAxios.defaults.headers = req.headers;
+export const buildClient = ({
+  req,
+}: { req: NextApiRequest } | NextPageContext) => {
+  serverSideAxios.defaults.headers = req?.headers;
   return serverSideAxios;
 };
