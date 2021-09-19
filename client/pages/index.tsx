@@ -1,6 +1,7 @@
 import React from "react";
 import { NextApiRequest } from "next";
-import axios from "axios";
+
+import { buildClient } from "../api";
 
 interface CurrentUser {
   id: string;
@@ -26,17 +27,13 @@ const Landing = (props: Props) => {
 
 export default Landing;
 
-export const getServerSideProps = async ({
-  req,
-}: {
+export const getServerSideProps = async (context: {
   req: NextApiRequest;
 }): Promise<{ props: Props }> => {
   try {
-    const response = await axios.get(
-      "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
-      { headers: req.headers, withCredentials: true }
-    );
-    return { props: { currentUser: response.data } };
+    const client = buildClient(context);
+    const { data } = await client.get("/api/users/currentuser");
+    return { props: { currentUser: data } };
   } catch (err) {
     console.log(err);
     return { props: { currentUser: null } };
