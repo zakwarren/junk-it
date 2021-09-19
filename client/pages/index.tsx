@@ -14,12 +14,11 @@ interface Props {
 
 const Landing = (props: Props) => {
   const { currentUser } = props;
-  console.log(currentUser);
 
   return (
-    <main className="w-full max-w-lg container px-4">
+    <main className="w-full container px-4">
       <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-purple-800">
-        Landing Page
+        {currentUser ? `Welcome ${currentUser.email}` : "You are not signed in"}
       </h1>
     </main>
   );
@@ -33,7 +32,7 @@ export const getServerSideProps = async (context: {
   try {
     const client = buildClient(context);
     const { data } = await client.get("/api/users/currentuser");
-    return { props: { currentUser: data } };
+    return { props: data };
   } catch (err) {
     console.log(err);
     return { props: { currentUser: null } };
