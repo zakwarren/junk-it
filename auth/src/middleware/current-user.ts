@@ -26,9 +26,12 @@ export const currentUser = (
   try {
     const { id, email } = jwt.verify(
       req.session.jwt,
-      process.env.JWT_PUBLIC_KEY!
+      process.env.JWT_PUBLIC_KEY!,
+      { algorithms: ["RS256"] }
     ) as UserPayload;
     req.user = { id, email };
+  } catch (err) {
+    console.log(err);
   } finally {
     next();
   }

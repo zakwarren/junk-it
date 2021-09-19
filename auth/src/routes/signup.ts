@@ -34,7 +34,8 @@ router.post(
 
     const userJwt = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_PRIVATE_KEY!
+      process.env.JWT_PRIVATE_KEY!,
+      { algorithm: "RS256" }
     );
     req.session = { jwt: userJwt };
 

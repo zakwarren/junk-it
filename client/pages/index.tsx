@@ -34,7 +34,7 @@ export const getServerSideProps = async ({
   try {
     const response = await axios.get(
       "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
-      { headers: req.headers }
+      { headers: req.headers, withCredentials: true }
     );
     return { props: { currentUser: response.data } };
   } catch (err) {
