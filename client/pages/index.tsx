@@ -1,7 +1,4 @@
 import React from "react";
-import { NextApiRequest } from "next";
-
-import { buildClient } from "../api";
 
 interface CurrentUser {
   id: string;
@@ -25,16 +22,3 @@ const Landing = (props: Props) => {
 };
 
 export default Landing;
-
-export const getServerSideProps = async (context: {
-  req: NextApiRequest;
-}): Promise<{ props: Props }> => {
-  try {
-    const client = buildClient(context);
-    const { data } = await client.get("/api/users/currentuser");
-    return { props: data };
-  } catch (err) {
-    console.log(err);
-    return { props: { currentUser: null } };
-  }
-};

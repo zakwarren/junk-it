@@ -21,7 +21,7 @@ interface InitialProps {
 const AppComponent = ({ Component, pageProps, currentUser }: Props) => (
   <>
     <Header currentUser={currentUser} />
-    <Component {...pageProps} />
+    <Component {...pageProps} currentUser={currentUser} />
   </>
 );
 
