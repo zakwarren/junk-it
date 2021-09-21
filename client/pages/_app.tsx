@@ -2,6 +2,7 @@ import type { AppProps, AppContext } from "next/app";
 import "tailwindcss/tailwind.css";
 
 import { buildClient } from "../api";
+import { Header } from "../components";
 
 interface CurrentUser {
   id: string;
@@ -19,7 +20,7 @@ interface InitialProps {
 
 const AppComponent = ({ Component, pageProps, currentUser }: Props) => (
   <>
-    <h1>Header: {currentUser?.email}</h1>
+    <Header currentUser={currentUser} />
     <Component {...pageProps} />
   </>
 );
