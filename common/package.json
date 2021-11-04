@@ -4,7 +4,11 @@
   "description": "Common modules for the Junk It microservices project",
   "author": "Zak Warren",
   "license": "BSD-3-Clause",
-  "main": "index.js",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
   "scripts": {
     "clean": "del-cli ./build/*",
     "prebuild": "npm run clean",
@@ -18,8 +22,5 @@
   "devDependencies": {
     "del-cli": "^4.0.1",
     "typescript": "^4.4.4"
-  },
-  "files": [
-    "build/**/*"
-  ]
+  }
 }
