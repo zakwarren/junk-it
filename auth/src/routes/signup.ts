@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
 import { body } from "express-validator";
 import jwt from "jsonwebtoken";
+import { validateRequest } from "common";
 
-import { validateRequest } from "../middleware";
 import { User } from "../models";
 
 const router = Router();

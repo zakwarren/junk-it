@@ -8,8 +8,7 @@ import {
   singoutRouter,
   signupRouter,
 } from "./routes";
-import { NotFoundError } from "./errors";
-import { errorHandler } from "./middleware";
+import { NotFoundError, errorHandler } from "common";
 
 const app = express();
 // trust proxy as behind nginx, so should trust its traffic
