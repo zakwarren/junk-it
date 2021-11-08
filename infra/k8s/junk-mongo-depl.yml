@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: junk-mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: junk-mongo
+  template:
+    metadata:
+      labels:
+        app: junk-mongo
+    spec:
+      containers:
+        - name: junk-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: junk-mongo-service
+spec:
+  selector:
+    app: junk-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

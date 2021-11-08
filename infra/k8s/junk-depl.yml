@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-deployment
+  name: junk-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: junk
   template:
     metadata:
       labels:
-        app: auth
+        app: junk
     spec:
       containers:
-        - name: auth
-          image: auth
+        - name: junk
+          image: junk
           imagePullPolicy: Never
           env:
             - name: NODE_ENV
@@ -22,28 +22,23 @@ spec:
                 secretKeyRef:
                   name: env-secret
                   key: NODE_ENV
-            - name: JWT_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: auth-secret
-                  key: JWT_PRIVATE_KEY
             - name: JWT_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
                   name: env-secret
                   key: JWT_PUBLIC_KEY
             - name: MONGO_URI
-              value: "mongodb://auth-mongo-service:27017/auth"
+              value: "mongodb://junk-mongo-service:27017/junk"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: junk-service
 spec:
   selector:
-    app: auth
+    app: junk
   ports:
-    - name: auth
+    - name: junk
       protocol: TCP
       port: 3001
       targetPort: 3001

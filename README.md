@@ -8,3 +8,12 @@ and the back end services are all Node Express apps.
 
 It is designed to be deployed using docker images in a kubernetes
 cluster.
+
+## Start
+
+To run this project, ensure you have docker desktop and skaffold
+installed. Then run:
+
+```powershell
+skaffold dev
+```
