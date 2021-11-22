@@ -3,7 +3,7 @@ import "express-async-errors";
 import cookieSession from "cookie-session";
 import { NotFoundError, errorHandler, currentUser } from "common";
 
-import { createJunkRouter, showJunkRouter, indexJunkRouter } from "./routes";
+import { createJunkRouter, showJunkRouter, listJunkRouter } from "./routes";
 
 const app = express();
 // trust proxy as behind nginx, so should trust its traffic
@@ -20,7 +20,7 @@ app.use(currentUser);
 const rootRoute = "/api/junk";
 app.use(rootRoute, createJunkRouter);
 app.use(rootRoute, showJunkRouter);
-app.use(rootRoute, indexJunkRouter);
+app.use(rootRoute, listJunkRouter);
 
 app.all("*", () => {
   throw new NotFoundError();
