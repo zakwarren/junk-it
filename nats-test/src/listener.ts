@@ -1,5 +1,7 @@
-import nats, { Message } from "node-nats-streaming";
+import nats from "node-nats-streaming";
 import { randomBytes } from "crypto";
+
+import { JunkCreatedListener } from "./events";
 
 console.clear();
 
@@ -15,25 +17,7 @@ stan.on("connect", () => {
     process.exit();
   });
 
-  const options = stan
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable()
-    .setDurableName("listener-service");
-  const subscription = stan.subscribe(
-    "junk:created",
-    "listener-queueGroup",
-    options
-  );
-
-  subscription.on("message", (msg: Message) => {
-    const data = msg.getData();
-    if (typeof data === "string") {
-      console.log(`Received event #${msg.getSequence()}, with data: ${data}`);
-    }
-
-    msg.ack();
-  });
+  new JunkCreatedListener(stan).listen();
 });
 
 process.on("SIGINT", () => stan.close());
