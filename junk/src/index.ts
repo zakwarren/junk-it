@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 import { app } from "./app";
+import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
   if (!process.env.JWT_PUBLIC_KEY) {
@@ -11,6 +12,8 @@ const start = async () => {
   }
 
   try {
+    await natsWrapper.connect("junk-it", "abc", "http://nats-service:4222");
+    console.log("Connected to NATS");
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
   } catch (err) {
