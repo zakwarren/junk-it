@@ -1,4 +1,4 @@
-for %%s in (auth junk) do (
+for %%s in (auth junk orders) do (
   rmdir /s /q %%s\common
 
   mkdir %%s\common
@@ -6,5 +6,3 @@ for %%s in (auth junk) do (
   robocopy common\build %%s\common\build /e
   robocopy common %%s\common package.json
 )
-
-skaffold dev
