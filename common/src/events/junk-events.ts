@@ -9,3 +9,13 @@ export interface JunkCreatedEvent {
     userId: string;
   };
 }
+
+export interface JunkUpdatedEvent {
+  subject: Subjects.JunkUpdated;
+  data: {
+    id: string;
+    title: string;
+    price: number;
+    userId: string;
+  };
+}
