@@ -2,6 +2,7 @@ import request from "supertest";
 import mongoose from "mongoose";
 
 import { app } from "../../app";
+import { natsWrapper } from "../../nats-wrapper";
 
 describe("update junk router", () => {
   it("returns a 400 if the junk id is invalid", async () => {
@@ -90,5 +91,23 @@ describe("update junk router", () => {
       .send();
     expect(junkResponse.body.title).toEqual(newTitle);
     expect(junkResponse.body.price).toEqual(newPrice);
+  });
+
+  it("publishes an event", async () => {
+    const cookie = global.signin();
+    const response = await request(app)
+      .post("/api/junk")
+      .set("Cookie", cookie)
+      .send({ title: "Hello there", price: 20 });
+
+    const newTitle = "Taco made of nachos";
+    const newPrice = 100;
+    await request(app)
+      .put(`/api/junk/${response.body.id}`)
+      .set("Cookie", cookie)
+      .send({ title: newTitle, price: newPrice })
+      .expect(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });

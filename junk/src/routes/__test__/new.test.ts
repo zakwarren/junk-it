@@ -2,6 +2,7 @@ import request from "supertest";
 
 import { app } from "../../app";
 import { Junk } from "../../models";
+import { natsWrapper } from "../../nats-wrapper";
 
 describe("new junk route handler", () => {
   it("has a route handler listening to /api/junk for post requests", async () => {
@@ -66,5 +67,16 @@ describe("new junk route handler", () => {
     expect(junks).toHaveLength(1);
     expect(junks[0].price).toEqual(20);
     expect(junks[0].title).toEqual(title);
+  });
+
+  it("publishes an event", async () => {
+    const title = "Hello there";
+    await request(app)
+      .post("/api/junk")
+      .set("Cookie", global.signin())
+      .send({ title, price: 20 })
+      .expect(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
