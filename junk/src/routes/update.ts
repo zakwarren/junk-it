@@ -8,6 +8,8 @@ import {
 } from "common";
 
 import { Junk } from "../models";
+import { JunkUpdatedPublisher } from "../events";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -35,6 +37,13 @@ router.put(
 
     junk.set({ title: req.body.title, price: req.body.price });
     await junk.save();
+
+    new JunkUpdatedPublisher(natsWrapper.client).publish({
+      id: junk.id,
+      title: junk.title,
+      price: junk.price,
+      userId: junk.userId,
+    });
 
     res.send(junk);
   }
