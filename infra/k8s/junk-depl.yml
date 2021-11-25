@@ -29,6 +29,14 @@ spec:
                   key: JWT_PUBLIC_KEY
             - name: MONGO_URI
               value: "mongodb://junk-mongo-service:27017/junk"
+            - name: NATS_URL
+              value: "http://nats-service:4222"
+            - name: NATS_CLUSTER_ID
+              value: "junk-it"
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 ---
 apiVersion: v1
 kind: Service
