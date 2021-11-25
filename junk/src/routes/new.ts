@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import { requireAuth, validateRequest } from "common";
+import mongoose from "mongoose";
+import { requireAuth, validateRequest, DatabaseConnectionError } from "common";
 
 import { Junk } from "../models";
 import { JunkCreatedPublisher } from "../events";
@@ -21,16 +22,27 @@ router.post(
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
-    const junk = new Junk({ title, price, userId: req.user!.id });
-    await junk.save();
-    new JunkCreatedPublisher(natsWrapper.client).publish({
-      id: junk.id,
-      title: junk.title,
-      price: junk.price,
-      userId: junk.userId,
-    });
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+      const junk = new Junk({ title, price, userId: req.user!.id });
+      await junk.save();
 
-    res.status(201).send(junk);
+      await new JunkCreatedPublisher(natsWrapper.client).publish({
+        id: junk.id,
+        title: junk.title,
+        price: junk.price,
+        userId: junk.userId,
+      });
+
+      await session.commitTransaction();
+      res.status(201).send(junk);
+    } catch (err) {
+      await session.abortTransaction();
+      throw new DatabaseConnectionError();
+    } finally {
+      session.endSession();
+    }
   }
 );
 
