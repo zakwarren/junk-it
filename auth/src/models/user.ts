@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Document, model } from "mongoose";
 import { PasswordManager } from "../services";
 
 interface UserAttrs {
