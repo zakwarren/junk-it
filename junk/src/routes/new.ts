@@ -1,11 +1,15 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import mongoose from "mongoose";
-import { requireAuth, validateRequest, DatabaseConnectionError } from "common";
+import {
+  requireAuth,
+  validateRequest,
+  DatabaseConnectionError,
+  natsWrapper,
+} from "common";
 
 import { Junk } from "../models";
 import { JunkCreatedPublisher } from "../events";
-import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 

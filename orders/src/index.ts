@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
+import { natsWrapper } from "common";
 
 import { app } from "./app";
-import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
   if (!process.env.JWT_PUBLIC_KEY) {

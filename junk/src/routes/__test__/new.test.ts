@@ -1,8 +1,8 @@
 import request from "supertest";
+import { natsWrapper } from "common";
 
 import { app } from "../../app";
 import { Junk } from "../../models";
-import { natsWrapper } from "../../nats-wrapper";
 
 describe("new junk route handler", () => {
   it("has a route handler listening to /api/junk for post requests", async () => {

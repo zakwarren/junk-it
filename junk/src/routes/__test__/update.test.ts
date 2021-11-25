@@ -1,8 +1,8 @@
 import request from "supertest";
 import mongoose from "mongoose";
+import { natsWrapper } from "common";
 
 import { app } from "../../app";
-import { natsWrapper } from "../../nats-wrapper";
 
 describe("update junk router", () => {
   it("returns a 400 if the junk id is invalid", async () => {

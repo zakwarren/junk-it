@@ -7,11 +7,11 @@ import {
   requireAuth,
   NotAuthorizedError,
   DatabaseConnectionError,
+  natsWrapper,
 } from "common";
 
 import { Junk } from "../models";
 import { JunkUpdatedPublisher } from "../events";
-import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
