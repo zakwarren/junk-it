@@ -14,6 +14,7 @@ const start = async () => {
   try {
     await natsWrapper.connect("junk-it", "abc", "http://nats-service:4222");
     console.log("Connected to NATS");
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
   } catch (err) {
@@ -24,11 +25,12 @@ const start = async () => {
   app.listen(port, () => console.log(`Listening on port ${port}`));
 };
 
-start();
-
-process.on("SIGINT", async () => {
+const close = async () => {
   let error = null;
   try {
+    natsWrapper.client.close();
+    console.log("NATS connection closed");
+
     await mongoose.disconnect();
     console.log("Disconnecting from MongoDB");
   } catch (err) {
@@ -36,4 +38,9 @@ process.on("SIGINT", async () => {
   }
   console.log("Exiting");
   process.exit(error ? 1 : 0);
-});
+};
+
+start();
+
+process.on("SIGINT", close);
+process.on("SIGTERM", close);
