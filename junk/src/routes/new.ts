@@ -3,6 +3,8 @@ import { body } from "express-validator";
 import { requireAuth, validateRequest } from "common";
 
 import { Junk } from "../models";
+import { JunkCreatedPublisher } from "../events";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -21,6 +23,12 @@ router.post(
 
     const junk = new Junk({ title, price, userId: req.user!.id });
     await junk.save();
+    new JunkCreatedPublisher(natsWrapper.client).publish({
+      id: junk.id,
+      title: junk.title,
+      price: junk.price,
+      userId: junk.userId,
+    });
 
     res.status(201).send(junk);
   }
