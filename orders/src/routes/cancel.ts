@@ -6,9 +6,11 @@ import {
   validateRequest,
   NotFoundError,
   DatabaseConnectionError,
+  natsWrapper,
 } from "common";
 
 import { Order, OrderStatus } from "../models";
+import { OrderCancelledPublisher } from "../events";
 
 const router = express.Router();
 
@@ -19,7 +21,10 @@ router.patch(
   validateRequest,
   async (req: Request, res: Response) => {
     const { orderId } = req.body;
-    const order = await Order.findOne({ id: orderId, userId: req.user!.id });
+    const order = await Order.findOne({
+      id: orderId,
+      userId: req.user!.id,
+    }).populate("junk");
     if (!order) {
       throw new NotFoundError();
     }
@@ -29,6 +34,11 @@ router.patch(
       session.startTransaction();
       order.status = OrderStatus.Cancelled;
       await order.save();
+
+      new OrderCancelledPublisher(natsWrapper.client).publish({
+        id: order.id,
+        junk: { id: order.junk.id },
+      });
 
       await session.commitTransaction();
       res.send(order);

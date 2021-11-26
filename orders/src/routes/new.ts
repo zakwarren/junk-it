@@ -7,9 +7,11 @@ import {
   NotFoundError,
   BadRequestError,
   DatabaseConnectionError,
+  natsWrapper,
 } from "common";
 
 import { Junk, Order, OrderStatus } from "../models";
+import { OrderCreatedPublisher } from "../events";
 
 const router = express.Router();
 
@@ -46,6 +48,14 @@ router.post(
         junk,
       });
       await order.save();
+
+      new OrderCreatedPublisher(natsWrapper.client).publish({
+        id: order.id,
+        status: order.status,
+        userId: order.userId,
+        expiresAt: order.expiresAt.toISOString(),
+        junk: { id: junk.id, price: junk.price },
+      });
 
       await session.commitTransaction();
       res.status(201).send(order);
