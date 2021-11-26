@@ -1,2 +1,2 @@
-export { Order } from "./order";
+export { Order, OrderStatus } from "./order";
 export { Junk } from "./junk";
