@@ -1,5 +1,6 @@
 import request from "supertest";
 import mongoose from "mongoose";
+import { natsWrapper } from "common";
 
 import { app } from "../../app";
 import { Junk, OrderStatus } from "../../models";
@@ -61,5 +62,25 @@ describe("cancel order route handler", () => {
       .expect(200);
 
     expect(cancelledOrder.status).toEqual(OrderStatus.Cancelled);
+  });
+
+  it("emits an order cancelled event", async () => {
+    const junk = new Junk({ title: "Hello there", price: 20 });
+    await junk.save();
+
+    const user = global.signin();
+    const { body: order } = await request(app)
+      .post("/api/orders")
+      .set("Cookie", user)
+      .send({ junkId: junk.id })
+      .expect(201);
+
+    await request(app)
+      .patch(`/api/orders/${order.id}`)
+      .set("Cookie", user)
+      .send()
+      .expect(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });

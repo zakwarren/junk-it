@@ -1,5 +1,6 @@
 import request from "supertest";
 import mongoose from "mongoose";
+import { natsWrapper } from "common";
 
 import { app } from "../../app";
 import { Junk, Order, OrderStatus } from "../../models";
@@ -64,5 +65,18 @@ describe("new order route handler", () => {
     const exists = Order.findOne({ order });
 
     expect(exists).not.toBeNull();
+  });
+
+  it("emits an order created event", async () => {
+    const junk = new Junk({ title: "Hello there", price: 20 });
+    await junk.save();
+
+    const order = await request(app)
+      .post("/api/orders")
+      .set("Cookie", global.signin())
+      .send({ junkId: junk.id })
+      .expect(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
