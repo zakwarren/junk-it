@@ -7,7 +7,7 @@ import {
   BadRequestError,
 } from "common";
 
-import { Junk } from "../models";
+import { Junk, Order, OrderStatus } from "../models";
 
 const router = express.Router();
 
@@ -29,7 +29,20 @@ router.post(
       throw new BadRequestError("Junk is already reserved");
     }
 
-    res.send({});
+    const expiration = new Date();
+    expiration.setSeconds(
+      expiration.getSeconds() + +process.env.EXPIRATION_WINDOW_SECONDS!
+    );
+
+    const order = new Order({
+      userId: req.user!.id,
+      status: OrderStatus.Created,
+      expiresAt: expiration,
+      junk,
+    });
+    await order.save();
+
+    res.status(201).send(order);
   }
 );
 

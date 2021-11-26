@@ -19,6 +19,9 @@ const start = async () => {
   if (!process.env.NATS_URL) {
     throw new Error("NATS_URL must be defined");
   }
+  if (!process.env.EXPIRATION_WINDOW_SECONDS) {
+    throw new Error("EXPIRATION_WINDOW_SECONDS must be defined");
+  }
 
   try {
     await natsWrapper.connect(
