@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express";
+import mongoose from "mongoose";
 import { body } from "express-validator";
 import {
   requireAuth,
   validateRequest,
   NotFoundError,
   BadRequestError,
+  DatabaseConnectionError,
 } from "common";
 
 import { Junk, Order, OrderStatus } from "../models";
@@ -34,15 +36,25 @@ router.post(
       expiration.getSeconds() + +process.env.EXPIRATION_WINDOW_SECONDS!
     );
 
-    const order = new Order({
-      userId: req.user!.id,
-      status: OrderStatus.Created,
-      expiresAt: expiration,
-      junk,
-    });
-    await order.save();
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+      const order = new Order({
+        userId: req.user!.id,
+        status: OrderStatus.Created,
+        expiresAt: expiration,
+        junk,
+      });
+      await order.save();
 
-    res.status(201).send(order);
+      await session.commitTransaction();
+      res.status(201).send(order);
+    } catch (err) {
+      await session.abortTransaction();
+      throw new DatabaseConnectionError();
+    } finally {
+      session.endSession();
+    }
   }
 );
 

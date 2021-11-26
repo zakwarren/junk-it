@@ -49,6 +49,7 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZ/cAHFEmNhkrrkDfgv/KCQxDj
 apvu1uaWtow5dwlrrfFSI4TJ8LIlekqMRg2VlSuDZcnMwzpJeo5J2FyBeRIA0aEG
 jEZU/r8fKtPRwdf6UQIDAQAB
 -----END PUBLIC KEY-----`;
+  process.env.EXPIRATION_WINDOW_SECONDS = "900";
 
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
