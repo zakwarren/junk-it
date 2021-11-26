@@ -1,11 +1,7 @@
-import { Schema, Document, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
-interface JunkAttrs {
-  title: string;
-  price: number;
-}
-
-export type JunkDoc = Document & JunkAttrs;
+import { Order, OrderStatus } from "./order";
+import { JunkAttrs, JunkDoc } from "./junkTypes";
 
 const junkSchema = new Schema<JunkDoc>({
   title: { type: String, required: true },
@@ -19,6 +15,19 @@ junkSchema.set("toJSON", {
   },
   versionKey: false,
 });
+junkSchema.methods.isReserved = async function () {
+  const existingOrder = await Order.findOne({
+    junk: this.id,
+    status: {
+      $in: [
+        OrderStatus.Created,
+        OrderStatus.AwaitingPayment,
+        OrderStatus.Complete,
+      ],
+    },
+  });
+  return !!existingOrder;
+};
 
 const JunkModel = model<JunkDoc>("Junk", junkSchema);
 

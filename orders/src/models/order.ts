@@ -1,7 +1,7 @@
 import { Schema, Document, model } from "mongoose";
 import { OrderStatus } from "common";
 
-import { JunkDoc } from "./junk";
+import { JunkDoc } from "./junkTypes";
 
 interface OrderAttrs {
   userId: string;
@@ -40,4 +40,4 @@ class Order extends OrderModel {
   }
 }
 
-export { Order };
+export { Order, OrderStatus };
