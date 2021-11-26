@@ -7,7 +7,7 @@ import {
   listOrderRouter,
   showOrderRouter,
   newOrderRouter,
-  deleteOrderRouter,
+  cancelOrderRouter,
 } from "./routes";
 
 const app = express();
@@ -26,7 +26,7 @@ const rootRoute = "/api/orders";
 app.use(rootRoute, listOrderRouter);
 app.use(rootRoute, showOrderRouter);
 app.use(rootRoute, newOrderRouter);
-app.use(rootRoute, deleteOrderRouter);
+app.use(rootRoute, cancelOrderRouter);
 
 app.all("*", () => {
   throw new NotFoundError();
