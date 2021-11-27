@@ -6,9 +6,7 @@ export interface JunkAttrs {
   price: number;
 }
 
-export interface JunkDoc extends mongoose.Document {
+export interface JunkDoc extends mongoose.Document, JunkAttrs {
   _id: string;
-  title: string;
-  price: number;
   isReserved: () => Promise<Boolean>;
 }

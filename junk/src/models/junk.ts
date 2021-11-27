@@ -1,4 +1,5 @@
 import { Schema, Document, model } from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface JunkAttrs {
   title: string;
@@ -6,7 +7,9 @@ interface JunkAttrs {
   userId: string;
 }
 
-type JunkDoc = Document & JunkAttrs;
+interface JunkDoc extends Document, JunkAttrs {
+  version: number;
+}
 
 const junkSchema = new Schema<JunkDoc>({
   title: { type: String, required: true },
@@ -14,8 +17,11 @@ const junkSchema = new Schema<JunkDoc>({
   userId: { type: String, required: true },
 });
 
+junkSchema.set("versionKey", "version");
+junkSchema.plugin(updateIfCurrentPlugin);
+
 junkSchema.set("toJSON", {
-  transform(doc, ret) {
+  transform(_doc, ret) {
     ret.id = ret._id;
     delete ret._id;
   },
