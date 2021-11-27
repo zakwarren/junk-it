@@ -9,8 +9,8 @@ export class JunkCreatedListener extends Listener<JunkCreatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: JunkCreatedEvent["data"], msg: Message) {
-    const { title, price } = data;
-    const junk = new Junk({ title, price });
+    const { id, title, price } = data;
+    const junk = new Junk({ _id: id, title, price });
     await junk.save();
 
     msg.ack();
