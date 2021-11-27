@@ -10,7 +10,9 @@ interface OrderAttrs {
   junk: JunkDoc;
 }
 
-type OrderDoc = Document & OrderAttrs;
+interface OrderDoc extends Document, OrderAttrs {
+  version: number;
+}
 
 const orderSchema = new Schema<OrderDoc>({
   userId: { type: String, required: true },
@@ -24,12 +26,13 @@ const orderSchema = new Schema<OrderDoc>({
   junk: { type: Schema.Types.ObjectId, ref: "Junk" },
 });
 
+orderSchema.set("versionKey", "version");
+
 orderSchema.set("toJSON", {
-  transform(doc, ret) {
+  transform(_doc, ret) {
     ret.id = ret._id;
     delete ret._id;
   },
-  versionKey: false,
 });
 
 const OrderModel = model<OrderDoc>("Order", orderSchema);

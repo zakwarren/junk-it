@@ -25,7 +25,6 @@ junkSchema.set("toJSON", {
     ret.id = ret._id;
     delete ret._id;
   },
-  versionKey: false,
 });
 
 const JunkModel = model<JunkDoc>("Junk", junkSchema);

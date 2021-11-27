@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 import { Order, OrderStatus } from "./order";
 import { JunkAttrs, JunkDoc } from "./junkTypes";
@@ -8,12 +9,14 @@ const junkSchema = new Schema<JunkDoc>({
   price: { type: Number, required: true },
 });
 
+junkSchema.set("versionKey", "version");
+junkSchema.plugin(updateIfCurrentPlugin);
+
 junkSchema.set("toJSON", {
-  transform(doc, ret) {
+  transform(_doc, ret) {
     ret.id = ret._id;
     delete ret._id;
   },
-  versionKey: false,
 });
 junkSchema.methods.isReserved = async function () {
   const existingOrder = await Order.findOne({

@@ -37,6 +37,7 @@ router.post(
         title: junk.title,
         price: junk.price,
         userId: junk.userId,
+        version: junk.version,
       });
 
       await session.commitTransaction();

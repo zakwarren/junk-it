@@ -37,6 +37,7 @@ router.patch(
 
       new OrderCancelledPublisher(natsWrapper.client).publish({
         id: order.id,
+        version: order.version,
         junk: { id: order.junk.id },
       });
 

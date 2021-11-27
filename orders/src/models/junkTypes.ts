@@ -8,5 +8,6 @@ export interface JunkAttrs {
 
 export interface JunkDoc extends mongoose.Document, JunkAttrs {
   _id: string;
+  version: number;
   isReserved: () => Promise<Boolean>;
 }
