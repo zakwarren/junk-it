@@ -1,4 +1,5 @@
 import { Schema, Document, model } from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "common";
 
 import { JunkDoc } from "./junkTypes";
@@ -27,6 +28,7 @@ const orderSchema = new Schema<OrderDoc>({
 });
 
 orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.set("toJSON", {
   transform(_doc, ret) {
