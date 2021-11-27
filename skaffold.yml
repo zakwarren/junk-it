@@ -8,7 +8,7 @@ build:
   local:
     push: false
   artifacts:
-    - image: auth
+    - image: junkit-auth
       context: auth
       docker:
         dockerfile: dockerfile
@@ -16,7 +16,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: junk
+    - image: junkit-junk
       context: junk
       docker:
         dockerfile: dockerfile
@@ -24,7 +24,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: orders
+    - image: junkit-orders
       context: orders
       docker:
         dockerfile: dockerfile
@@ -32,7 +32,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: client
+    - image: junkit-client
       context: client
       docker:
         dockerfile: dockerfile

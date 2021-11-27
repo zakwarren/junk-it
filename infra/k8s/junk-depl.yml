@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: junk
-          image: junk
+          image: junkit-junk
           imagePullPolicy: Never
           env:
             - name: NODE_ENV
