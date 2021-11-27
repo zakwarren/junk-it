@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { natsWrapper } from "common";
 
 import { app } from "./app";
+import { JunkCreatedListener, JunkUpdatedListener } from "./events";
 
 const start = async () => {
   if (!process.env.JWT_PUBLIC_KEY) {
@@ -33,6 +34,9 @@ const start = async () => {
 
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
+
+    new JunkCreatedListener(natsWrapper.client).listen();
+    new JunkUpdatedListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
   }
