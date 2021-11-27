@@ -1,5 +1,11 @@
 import { Message } from "node-nats-streaming";
-import { Listener, Subjects, JunkUpdatedEvent } from "common";
+import mongoose from "mongoose";
+import {
+  Listener,
+  Subjects,
+  JunkUpdatedEvent,
+  DatabaseConnectionError,
+} from "common";
 
 import { Junk } from "../../models";
 import { queueGroupName } from "./queue-group-name";
@@ -9,15 +15,26 @@ export class JunkUpdatedListener extends Listener<JunkUpdatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: JunkUpdatedEvent["data"], msg: Message) {
-    const junk = await Junk.findById(data.id);
+    const junk = await Junk.findByEvent(data);
     if (!junk) {
       throw new Error("Junk not found");
     }
 
-    const { title, price } = data;
-    junk.set({ title, price });
-    await junk.save();
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
 
-    msg.ack();
+      const { title, price } = data;
+      junk.set({ title, price });
+      await junk.save();
+
+      await session.commitTransaction();
+      msg.ack();
+    } catch (err) {
+      await session.abortTransaction();
+      throw new DatabaseConnectionError();
+    } finally {
+      session.endSession();
+    }
   }
 }

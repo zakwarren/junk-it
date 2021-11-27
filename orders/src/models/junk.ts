@@ -38,6 +38,10 @@ class Junk extends JunkModel {
   constructor(attrs: JunkAttrs) {
     super(attrs);
   }
+
+  static findByEvent(event: { id: string; version: number }) {
+    return Junk.findOne({ _id: event.id, version: event.version - 1 });
+  }
 }
 
 export { Junk };
