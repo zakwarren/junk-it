@@ -1,0 +1,37 @@
+{
+  "name": "expiration",
+  "version": "1.0.0",
+  "description": "Expiration service",
+  "author": "Zak Warren",
+  "license": "BSD-3-Clause",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev --poll src/index.ts",
+    "test": "jest --watchAll --no-cache",
+    "build": "docker build -t junkit-expiration ."
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
+  "keywords": [
+    "microservice",
+    "ecommerce",
+    "expiration"
+  ],
+  "dependencies": {
+    "@types/bull": "^3.15.6",
+    "bull": "^4.1.1",
+    "common": "file:common",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "jest": "^27.1.0",
+    "ts-jest": "^27.0.5"
+  }
+}

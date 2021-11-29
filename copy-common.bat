@@ -1,4 +1,4 @@
-for %%s in (auth junk orders) do (
+for %%s in (auth expiration junk orders) do (
   rmdir /s /q %%s\common
 
   mkdir %%s\common
