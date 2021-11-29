@@ -5,7 +5,7 @@ import {
   validateRequest,
   NotFoundError,
   requireAuth,
-  NotAuthorizedError,
+  BadRequestError,
   DatabaseConnectionError,
   natsWrapper,
 } from "common";
@@ -27,14 +27,16 @@ router.put(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const junk = await Junk.findById(req.params.id);
-
+    const junk = await Junk.findOne({
+      _id: req.params.id,
+      userId: req.user!.id,
+    });
     if (!junk) {
       throw new NotFoundError();
     }
 
-    if (junk.userId !== req.user!.id) {
-      throw new NotAuthorizedError();
+    if (junk.orderId) {
+      throw new BadRequestError("Cannot edit a reserved junk");
     }
 
     const session = await mongoose.startSession();

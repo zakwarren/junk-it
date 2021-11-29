@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { natsWrapper } from "common";
 
 import { app } from "../../app";
+import { Junk } from "../../models";
 
 describe("update junk router", () => {
   it("returns a 400 if the junk id is invalid", async () => {
@@ -30,7 +31,7 @@ describe("update junk router", () => {
       .expect(401);
   });
 
-  it("returns a 401 if the user does not own the junk", async () => {
+  it("returns an error if the user does not own the junk", async () => {
     const title = "Hello there";
     const price = 20;
 
@@ -43,7 +44,7 @@ describe("update junk router", () => {
       .put(`/api/junk/${response.body.id}`)
       .set("Cookie", global.signin())
       .send({ title: "Taco made of nachos", price: 100 })
-      .expect(401);
+      .expect(404);
 
     const junkResponse = await request(app)
       .get(`/api/junk/${response.body.id}`)
@@ -109,5 +110,23 @@ describe("update junk router", () => {
       .expect(200);
 
     expect(natsWrapper.client.publish).toHaveBeenCalled();
+  });
+
+  it("rejects updates if the junk is reserved", async () => {
+    const cookie = global.signin();
+    const response = await request(app)
+      .post("/api/junk")
+      .set("Cookie", cookie)
+      .send({ title: "Hello there", price: 20 });
+
+    const junk = await Junk.findById(response.body.id);
+    junk!.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+    await junk!.save();
+
+    await request(app)
+      .put(`/api/junk/${response.body.id}`)
+      .set("Cookie", cookie)
+      .send({ title: "Taco made of nachos", price: 100 })
+      .expect(400);
   });
 });
