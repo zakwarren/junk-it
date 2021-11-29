@@ -31,6 +31,9 @@ const start = async () => {
 
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
   }
@@ -47,9 +50,6 @@ const close = async () => {
 
     await mongoose.disconnect();
     console.log("Disconnecting from MongoDB");
-
-    new OrderCreatedListener(natsWrapper.client).listen();
-    new OrderCancelledListener(natsWrapper.client).listen();
   } catch (err) {
     error = err;
   }
