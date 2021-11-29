@@ -29,7 +29,6 @@ const setup = async () => {
 describe("order created listener", () => {
   it("sets the orderId of the junk", async () => {
     const { listener, data, msg, junk } = await setup();
-
     await listener.onMessage(data, msg);
 
     const updatedJunk = await Junk.findById(junk.id);
@@ -39,9 +38,21 @@ describe("order created listener", () => {
 
   it("acks the message", async () => {
     const { listener, data, msg, junk } = await setup();
-
     await listener.onMessage(data, msg);
 
     expect(msg.ack).toHaveBeenCalled();
+  });
+
+  it("publishes a junk updated event", async () => {
+    const { listener, data, msg, junk } = await setup();
+    await listener.onMessage(data, msg);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+    const dataStr = (natsWrapper.client.publish as jest.Mock).mock.calls[0][1];
+    const junkUpdatedData = JSON.parse(dataStr);
+
+    expect(junkUpdatedData.id).toEqual(junk.id);
+    expect(junkUpdatedData.orderId).toEqual(data.id);
   });
 });

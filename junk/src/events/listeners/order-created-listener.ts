@@ -8,6 +8,7 @@ import {
 } from "common";
 
 import { queueGroupName } from "./queue-group-name";
+import { JunkUpdatedPublisher } from "../publishers";
 import { Junk } from "../../models";
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
@@ -30,6 +31,15 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       session.startTransaction();
       junk.set({ orderId });
       await junk.save();
+
+      await new JunkUpdatedPublisher(this.client).publish({
+        id: junk.id,
+        version: junk.version,
+        title: junk.title,
+        price: junk.price,
+        userId: junk.userId,
+        orderId: junk.orderId,
+      });
 
       await session.commitTransaction();
       msg.ack();
