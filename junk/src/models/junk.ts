@@ -9,12 +9,14 @@ interface JunkAttrs {
 
 interface JunkDoc extends Document, JunkAttrs {
   version: number;
+  orderId?: string;
 }
 
 const junkSchema = new Schema<JunkDoc>({
   title: { type: String, required: true },
   price: { type: Number, required: true },
   userId: { type: String, required: true },
+  orderId: { type: String },
 });
 
 junkSchema.set("versionKey", "version");
