@@ -19,5 +19,6 @@ export interface JunkUpdatedEvent {
     title: string;
     price: number;
     userId: string;
+    orderId?: string;
   };
 }
