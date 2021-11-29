@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { natsWrapper } from "common";
 
 import { app } from "./app";
+import { OrderCreatedListener, OrderCancelledListener } from "./events";
 
 const start = async () => {
   if (!process.env.JWT_PUBLIC_KEY) {
@@ -46,6 +47,9 @@ const close = async () => {
 
     await mongoose.disconnect();
     console.log("Disconnecting from MongoDB");
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
   } catch (err) {
     error = err;
   }
