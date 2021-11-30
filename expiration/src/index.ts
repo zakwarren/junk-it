@@ -1,5 +1,7 @@
 import { natsWrapper } from "common";
 
+import { OrderCreatedListener } from "./events";
+
 const start = async () => {
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error("NATS_CLUSTER_ID must be defined");
@@ -21,6 +23,8 @@ const start = async () => {
       process.env.NATS_URL
     );
     console.log("Connected to NATS");
+
+    new OrderCreatedListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
   }
