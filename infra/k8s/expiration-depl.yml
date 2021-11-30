@@ -25,7 +25,7 @@ spec:
             - name: NATS_URL
               value: "http://nats-service:4222"
             - name: NATS_CLUSTER_ID
-              value: "expiration-it"
+              value: "junk-it"
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
