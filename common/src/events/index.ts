@@ -7,3 +7,4 @@ export * from "./types";
 
 export * from "./junk-events";
 export * from "./order-events";
+export * from "./expiration-events";
