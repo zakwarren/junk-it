@@ -37,6 +37,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: STRIPE_KEY
+                secretKeyRef:
+                  name: env-secret
+                  key: STRIPE_KEY
 ---
 apiVersion: v1
 kind: Service
