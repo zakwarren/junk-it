@@ -5,6 +5,7 @@ import {
   validateRequest,
   BadRequestError,
   NotFoundError,
+  OrderStatus,
 } from "common";
 
 import { Order } from "../models";
@@ -16,10 +17,25 @@ router.post(
   requireAuth,
   [
     body("token").not().isEmpty().withMessage("Token is required"),
-    body("orderId").not().isEmpty().withMessage("Order ID is required"),
+    body("orderId")
+      .not()
+      .isEmpty()
+      .withMessage("Order ID is required")
+      .isMongoId()
+      .withMessage("Please provide a valid order ID"),
   ],
   validateRequest,
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
+    const { token, orderId } = req.body;
+
+    const order = await Order.findOne({ _id: orderId, userId: req.user?.id });
+    if (!order) {
+      throw new NotFoundError();
+    }
+    if (order.status === OrderStatus.Cancelled) {
+      throw new BadRequestError("Cannot pay for a cancelled order");
+    }
+
     res.send({ success: true });
   }
 );
