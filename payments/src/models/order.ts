@@ -3,12 +3,17 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "common";
 
 interface OrderAttrs {
+  _id?: string;
+  version?: number;
   userId: string;
   price: number;
   status: OrderStatus;
 }
 
-interface OrderDoc extends Document, OrderAttrs {}
+interface OrderDoc extends Document, OrderAttrs {
+  _id: string;
+  version: number;
+}
 
 const orderSchema = new Schema<OrderDoc>({
   userId: { type: String, required: true },
