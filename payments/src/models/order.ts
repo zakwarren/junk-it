@@ -13,6 +13,7 @@ interface OrderAttrs {
 interface OrderDoc extends Document, OrderAttrs {
   _id: string;
   version: number;
+  findByEvent(event: { id: string; version: number }): Promise<OrderDoc | null>;
 }
 
 const orderSchema = new Schema<OrderDoc>({
@@ -40,6 +41,10 @@ const OrderModel = model<OrderDoc>("Order", orderSchema);
 class Order extends OrderModel {
   constructor(attrs: OrderAttrs) {
     super(attrs);
+  }
+
+  static findByEvent(event: { id: string; version: number }) {
+    return Order.findOne({ _id: event.id, version: event.version - 1 });
   }
 }
 
