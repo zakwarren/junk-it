@@ -1,7 +1,8 @@
 import { AppContext } from "next/app";
+import Router from "next/router";
 import { AxiosInstance } from "axios";
 
-import { CurrentUser, Junk } from "../../interfaces";
+import { CurrentUser, Junk, Order } from "../../interfaces";
 import { useRequest } from "../../hooks";
 
 interface Props {
@@ -13,7 +14,8 @@ const JunkShow = ({ junk }: Props) => {
     url: "/api/orders",
     method: "post",
     body: { junkId: junk.id },
-    onSuccess: (order) => console.log(order),
+    onSuccess: (order: Order) =>
+      Router.push("/orders/[orderId]", `/orders/${order.id}`),
   });
 
   return (
