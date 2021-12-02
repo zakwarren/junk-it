@@ -1,7 +1,8 @@
+import { Event } from "./base-event";
 import { OrderStatus } from "./types";
 import { Subjects } from "./subjects";
 
-export interface OrderCreatedEvent {
+export interface OrderCreatedEvent extends Event {
   subject: Subjects.OrderCreated;
   data: {
     id: string;
@@ -16,7 +17,7 @@ export interface OrderCreatedEvent {
   };
 }
 
-export interface OrderCancelledEvent {
+export interface OrderCancelledEvent extends Event {
   subject: Subjects.OrderCancelled;
   data: {
     id: string;
