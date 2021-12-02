@@ -1,5 +1,6 @@
 import React from "react";
 import { AppContext } from "next/app";
+import Link from "next/link";
 import { AxiosInstance } from "axios";
 
 import { CurrentUser, Junk } from "../interfaces";
@@ -16,6 +17,11 @@ const Landing = (props: Props) => {
     <tr key={junk.id}>
       <td className="px-6 py-4 whitespace-nowrap">{junk.title}</td>
       <td className="px-6 py-4 whitespace-nowrap">{junk.price}</td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <Link href="/junk/[junkId]" as={`/junk/${junk.id}`}>
+          <a>View</a>
+        </Link>
+      </td>
     </tr>
   ));
 
@@ -39,6 +45,10 @@ const Landing = (props: Props) => {
             >
               Price
             </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            ></th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">{junkList}</tbody>
@@ -48,7 +58,7 @@ const Landing = (props: Props) => {
 };
 
 Landing.getInitialProps = async (
-  context: AppContext,
+  context: AppContext["ctx"],
   client: AxiosInstance,
   currentUser: CurrentUser | null
 ) => {
