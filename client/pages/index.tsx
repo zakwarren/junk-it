@@ -1,24 +1,60 @@
 import React from "react";
+import { AppContext } from "next/app";
+import { AxiosInstance } from "axios";
 
-interface CurrentUser {
-  id: string;
-  email: string;
-}
+import { CurrentUser, Junk } from "../interfaces";
 
 interface Props {
   currentUser: CurrentUser | null;
+  junk: [Junk];
 }
 
 const Landing = (props: Props) => {
-  const { currentUser } = props;
+  const { currentUser, junk } = props;
+
+  const junkList = junk.map((junk) => (
+    <tr key={junk.id}>
+      <td className="px-6 py-4 whitespace-nowrap">{junk.title}</td>
+      <td className="px-6 py-4 whitespace-nowrap">{junk.price}</td>
+    </tr>
+  ));
 
   return (
     <main className="w-full container px-4">
-      <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-purple-800">
+      <h1 className="text-xl font-normal leading-normal mt-0 mb-2 text-purple-800">
         {currentUser ? `Welcome ${currentUser.email}` : "You are not signed in"}
       </h1>
+      <table className="border-collapse table-auto min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Title
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Price
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">{junkList}</tbody>
+      </table>
     </main>
   );
+};
+
+Landing.getInitialProps = async (
+  context: AppContext,
+  client: AxiosInstance,
+  currentUser: CurrentUser | null
+) => {
+  const { data } = await client.get("/api/junk");
+
+  return { junk: data };
 };
 
 export default Landing;
