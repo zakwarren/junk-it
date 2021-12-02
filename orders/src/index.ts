@@ -6,6 +6,7 @@ import {
   JunkCreatedListener,
   JunkUpdatedListener,
   ExpirationCompleteListener,
+  PaymentCreatedListener,
 } from "./events";
 
 const start = async () => {
@@ -42,6 +43,7 @@ const start = async () => {
     new JunkCreatedListener(natsWrapper.client).listen();
     new JunkUpdatedListener(natsWrapper.client).listen();
     new ExpirationCompleteListener(natsWrapper.client).listen();
+    new PaymentCreatedListener(natsWrapper.client).listen();
   } catch (err) {
     console.error(err);
   }

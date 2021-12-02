@@ -1,0 +1,39 @@
+import mongoose from "mongoose";
+import { Message } from "node-nats-streaming";
+import {
+  Listener,
+  Subjects,
+  PaymentCreatedEvent,
+  OrderStatus,
+  DatabaseConnectionError,
+} from "common";
+
+import { queueGroupName } from "./queue-group-name";
+import { Order } from "../../models";
+
+export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
+  subject: Subjects.PaymentCreated = Subjects.PaymentCreated;
+  queueGroupName = queueGroupName;
+
+  async onMessage(data: PaymentCreatedEvent["data"], msg: Message) {
+    const order = await Order.findById(data.orderId);
+    if (!order) {
+      throw new Error("Order not found");
+    }
+
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+      order.set({ status: OrderStatus.Complete });
+      await order.save();
+
+      await session.commitTransaction();
+      msg.ack();
+    } catch (err) {
+      await session.abortTransaction();
+      throw new DatabaseConnectionError();
+    } finally {
+      session.endSession();
+    }
+  }
+}
