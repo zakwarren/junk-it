@@ -48,4 +48,4 @@ class Order extends OrderModel {
   }
 }
 
-export { Order, OrderStatus };
+export { Order };

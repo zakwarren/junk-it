@@ -1,14 +1,16 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
+import mongoose from "mongoose";
 import {
   requireAuth,
   validateRequest,
-  BadRequestError,
-  NotFoundError,
   OrderStatus,
+  NotFoundError,
+  BadRequestError,
+  DatabaseConnectionError,
 } from "common";
 
-import { Order } from "../models";
+import { Order, Payment } from "../models";
 import { stripe } from "../stripe";
 
 const router = express.Router();
@@ -37,13 +39,26 @@ router.post(
       throw new BadRequestError("Cannot pay for a cancelled order");
     }
 
-    await stripe.charges.create({
+    const charge = await stripe.charges.create({
       currency: "gbp",
       amount: order.price * 100,
       source: token,
     });
 
-    res.status(201).send({ success: true });
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+      const payment = new Payment({ orderId, stripeId: charge.id });
+      await payment.save();
+
+      await session.commitTransaction();
+      res.status(201).send({ success: true });
+    } catch (err) {
+      await session.abortTransaction();
+      throw new DatabaseConnectionError();
+    } finally {
+      session.endSession();
+    }
   }
 );
 

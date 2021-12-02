@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { OrderStatus } from "common";
 
 import { app } from "../../app";
-import { Order } from "../../models";
+import { Order, Payment } from "../../models";
 import { stripe } from "../../stripe";
 
 describe("new charge route handler", () => {
@@ -94,5 +94,11 @@ describe("new charge route handler", () => {
 
     expect(stripeCharge).toBeDefined();
     expect(stripeCharge?.currency).toEqual("gbp");
+
+    const payment = await Payment.findOne({
+      orderId: order.id,
+      stripeId: stripeCharge?.id,
+    });
+    expect(payment).not.toBeNull();
   });
 });
