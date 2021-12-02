@@ -6,8 +6,6 @@ import { app } from "../../app";
 import { Order } from "../../models";
 import { stripe } from "../../stripe";
 
-jest.mock("../../stripe");
-
 describe("new charge route handler", () => {
   it("has a route handler listening to /api/payments for post requests", async () => {
     const response = await request(app).post("/api/payments").send({});
@@ -72,12 +70,13 @@ describe("new charge route handler", () => {
       .expect(400);
   });
 
-  it("returns a 201 with valid inputs", async () => {
+  it("returns a 201 and a valid charge is created", async () => {
     const userId = new mongoose.Types.ObjectId().toHexString();
+    const price = Math.floor(Math.random() * 100000);
     const order = new Order({
       userId,
       version: 0,
-      price: 20,
+      price,
       status: OrderStatus.Created,
     });
     await order.save();
@@ -88,9 +87,12 @@ describe("new charge route handler", () => {
       .send({ token: "tok_visa", orderId: order.id })
       .expect(201);
 
-    const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
-    expect(chargeOptions.source).toEqual("tok_visa");
-    expect(chargeOptions.amount).toEqual(20 * 100);
-    expect(chargeOptions.currency).toEqual("gbp");
+    const stripeCharges = await stripe.charges.list({ limit: 50 });
+    const stripeCharge = stripeCharges.data.find(
+      (charge) => charge.amount === price * 100
+    );
+
+    expect(stripeCharge).toBeDefined();
+    expect(stripeCharge?.currency).toEqual("gbp");
   });
 });

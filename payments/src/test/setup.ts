@@ -1,6 +1,8 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import path from "path";
+import dotenv from "dotenv";
 
 declare global {
   var signin: (id?: string) => string[];
@@ -26,6 +28,14 @@ jest.mock("common", () => {
 });
 
 let mongo: MongoMemoryServer;
+
+try {
+  dotenv.config({ path: path.resolve(__dirname, "../../.env.test") });
+} catch (err) {
+  if (!process.env.STRIPE_KEY) {
+    console.warn("STRIPE_KEY is not defined");
+  }
+}
 
 beforeAll(async () => {
   process.env.JWT_PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
