@@ -1,6 +1,6 @@
 import request from "supertest";
 import mongoose from "mongoose";
-import { OrderStatus } from "common";
+import { OrderStatus, natsWrapper } from "common";
 
 import { app } from "../../app";
 import { Order, Payment } from "../../models";
@@ -100,5 +100,25 @@ describe("new charge route handler", () => {
       stripeId: stripeCharge?.id,
     });
     expect(payment).not.toBeNull();
+  });
+
+  it("publishes an event", async () => {
+    const userId = new mongoose.Types.ObjectId().toHexString();
+    const price = Math.floor(Math.random() * 100000);
+    const order = new Order({
+      userId,
+      version: 0,
+      price,
+      status: OrderStatus.Created,
+    });
+    await order.save();
+
+    await request(app)
+      .post("/api/payments")
+      .set("Cookie", global.signin(userId))
+      .send({ token: "tok_visa", orderId: order.id })
+      .expect(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });

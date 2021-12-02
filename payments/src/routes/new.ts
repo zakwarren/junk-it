@@ -8,9 +8,11 @@ import {
   NotFoundError,
   BadRequestError,
   DatabaseConnectionError,
+  natsWrapper,
 } from "common";
 
 import { Order, Payment } from "../models";
+import { PaymentCreatedPublisher } from "../events";
 import { stripe } from "../stripe";
 
 const router = express.Router();
@@ -51,8 +53,14 @@ router.post(
       const payment = new Payment({ orderId, stripeId: charge.id });
       await payment.save();
 
+      await new PaymentCreatedPublisher(natsWrapper.client).publish({
+        id: payment.id,
+        orderId: payment.orderId,
+        stripeId: payment.stripeId,
+      });
+
       await session.commitTransaction();
-      res.status(201).send({ success: true });
+      res.status(201).send({ id: payment.id });
     } catch (err) {
       await session.abortTransaction();
       throw new DatabaseConnectionError();
