@@ -38,6 +38,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: STRIPE_KEY
+              valueFrom:
                 secretKeyRef:
                   name: env-secret
                   key: STRIPE_KEY
