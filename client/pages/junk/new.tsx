@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import Router from "next/router";
 
 import { useRequest } from "../../hooks";
+import { Heading, Button } from "../../components";
 
 const NewJunk = () => {
   const [title, setTitle] = useState("");
@@ -32,9 +33,7 @@ const NewJunk = () => {
       className="w-full max-w-md container mx-auto px-4"
       onSubmit={onSubmit}
     >
-      <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-purple-800">
-        Create Junk
-      </h1>
+      <Heading>Create Junk</Heading>
       <div className="md:flex md:items-center mb-6">
         <label
           htmlFor="title"
@@ -68,9 +67,7 @@ const NewJunk = () => {
         />
       </div>
       {errors}
-      <button className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
-        Submit
-      </button>
+      <Button>Submit</Button>
     </form>
   );
 };

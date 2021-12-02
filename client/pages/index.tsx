@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AxiosInstance } from "axios";
 
 import { CurrentUser, Junk } from "../interfaces";
+import { Heading } from "../components";
 
 interface Props {
   currentUser: CurrentUser | null;
@@ -27,9 +28,9 @@ const Landing = (props: Props) => {
 
   return (
     <main className="w-full container px-4">
-      <h1 className="text-xl font-normal leading-normal mt-0 mb-2 text-purple-800">
+      <Heading>
         {currentUser ? `Welcome ${currentUser.email}` : "You are not signed in"}
-      </h1>
+      </Heading>
       <table className="border-collapse table-auto min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>

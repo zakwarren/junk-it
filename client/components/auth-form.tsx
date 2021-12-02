@@ -2,6 +2,8 @@ import { useState, FormEvent } from "react";
 import Router from "next/router";
 
 import { useRequest } from "../hooks";
+import { Heading } from "./heading";
+import { Button } from "./button";
 
 interface Props {
   title: string;
@@ -31,9 +33,9 @@ export const AuthForm = (props: Props) => {
       onSubmit={onSumbit}
       className="w-full max-w-md container mx-auto px-4"
     >
-      <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-purple-800">
+      <Heading className="text-6xl font-normal leading-normal mt-0 mb-2 text-purple-800">
         {title}
-      </h1>
+      </Heading>
       <div className="md:flex md:items-center mb-6">
         <label
           htmlFor="email"
@@ -65,9 +67,7 @@ export const AuthForm = (props: Props) => {
         />
       </div>
       {errors}
-      <button className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
-        Submit
-      </button>
+      <Button>Submit</Button>
     </form>
   );
 };
