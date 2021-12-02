@@ -29,18 +29,26 @@ AppComponent.getInitialProps = async (
   appContext: AppContext
 ): Promise<InitialProps> => {
   let pageProps = {};
-  if (appContext.Component?.getInitialProps) {
-    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
-  }
+  let currentUser = null;
+  const client = buildClient(appContext.ctx);
 
   try {
-    const client = buildClient(appContext.ctx);
     const { data } = await client.get("/api/users/currentuser");
-    return { pageProps, ...data };
+    currentUser = data?.currentUser;
   } catch (err) {
     console.log(err);
-    return { pageProps, currentUser: null };
   }
+
+  if (appContext.Component?.getInitialProps) {
+    pageProps = await appContext.Component.getInitialProps(
+      appContext.ctx,
+      // @ts-ignore
+      client,
+      currentUser
+    );
+  }
+
+  return { pageProps, currentUser };
 };
 
 export default AppComponent;
