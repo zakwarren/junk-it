@@ -54,4 +54,16 @@ describe("expiration complete listener", () => {
 
     expect(msg.ack).toHaveBeenCalled();
   });
+
+  it("doesn't cancel an order that has a status of complete", async () => {
+    const { listener, data, msg, order } = await setup();
+    order.set({ status: OrderStatus.Complete });
+    await order.save();
+    await listener.onMessage(data, msg);
+
+    const completeOrder = await Order.findById(order.id);
+
+    expect(completeOrder?.status).toEqual(OrderStatus.Complete);
+    expect(msg.ack).toHaveBeenCalled();
+  });
 });

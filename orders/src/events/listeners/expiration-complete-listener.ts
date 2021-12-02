@@ -21,6 +21,9 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
     if (!order) {
       throw new Error("Order not found");
     }
+    if (order.status === OrderStatus.Complete) {
+      return msg.ack();
+    }
 
     const session = await mongoose.startSession();
     try {
