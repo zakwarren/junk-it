@@ -1,10 +1,9 @@
 import Link from "next/link";
 
+import { CurrentUser } from "../interfaces";
+
 interface Props {
-  currentUser: {
-    id: string;
-    email: string;
-  } | null;
+  currentUser: CurrentUser | null;
 }
 
 export const Header = ({ currentUser }: Props) => {
