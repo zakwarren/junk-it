@@ -1,9 +1,9 @@
 import request from "supertest";
 import mongoose from "mongoose";
-import { natsWrapper } from "common";
+import { natsWrapper, OrderStatus } from "common";
 
 import { app } from "../../app";
-import { Junk, OrderStatus } from "../../models";
+import { Junk } from "../../models";
 
 describe("cancel order route handler", () => {
   it("can only be accessed if the user is signed in", async () => {

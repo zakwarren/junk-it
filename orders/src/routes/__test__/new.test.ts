@@ -1,9 +1,9 @@
 import request from "supertest";
 import mongoose from "mongoose";
-import { natsWrapper } from "common";
+import { natsWrapper, OrderStatus } from "common";
 
 import { app } from "../../app";
-import { Junk, Order, OrderStatus } from "../../models";
+import { Junk, Order } from "../../models";
 
 describe("new order route handler", () => {
   it("has a route handler listening to /api/orders for post requests", async () => {

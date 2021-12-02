@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { OrderStatus } from "common";
 
-import { Order, OrderStatus } from "./order";
+import { Order } from "./order";
 import { JunkAttrs, JunkDoc } from "./junkTypes";
 
 const junkSchema = new Schema<JunkDoc>({

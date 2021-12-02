@@ -7,9 +7,10 @@ import {
   NotFoundError,
   DatabaseConnectionError,
   natsWrapper,
+  OrderStatus,
 } from "common";
 
-import { Order, OrderStatus } from "../models";
+import { Order } from "../models";
 import { OrderCancelledPublisher } from "../events";
 
 const router = express.Router();

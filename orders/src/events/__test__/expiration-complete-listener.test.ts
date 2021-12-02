@@ -1,8 +1,8 @@
 import { Message } from "node-nats-streaming";
-import { natsWrapper, ExpirationCompleteEvent } from "common";
+import { natsWrapper, ExpirationCompleteEvent, OrderStatus } from "common";
 
 import { ExpirationCompleteListener } from "../listeners";
-import { Junk, Order, OrderStatus } from "../../models";
+import { Junk, Order } from "../../models";
 
 const setup = async () => {
   const listener = new ExpirationCompleteListener(natsWrapper.client);

@@ -8,9 +8,10 @@ import {
   BadRequestError,
   DatabaseConnectionError,
   natsWrapper,
+  OrderStatus,
 } from "common";
 
-import { Junk, Order, OrderStatus } from "../models";
+import { Junk, Order } from "../models";
 import { OrderCreatedPublisher } from "../events";
 
 const router = express.Router();

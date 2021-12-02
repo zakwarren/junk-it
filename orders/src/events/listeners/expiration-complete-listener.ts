@@ -5,10 +5,11 @@ import {
   Subjects,
   ExpirationCompleteEvent,
   DatabaseConnectionError,
+  OrderStatus,
 } from "common";
 
 import { queueGroupName } from "./queue-group-name";
-import { Order, OrderStatus } from "../../models";
+import { Order } from "../../models";
 import { OrderCancelledPublisher } from "../publishers";
 
 export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent> {
