@@ -7,7 +7,7 @@ microservices architecture. The client is a Nextjs React app
 and the back end services are all Node Express apps.
 
 It is designed to be deployed using docker images in a kubernetes
-cluster.
+cluster. It makes use of github actions for its CI/CD pipeline.
 
 ## Start
 
@@ -49,9 +49,6 @@ directory.
 The common directory contains common code in a module that is shared
 between all back end services. This approach allows for easy code
 reuse, without having to rewrite the implementation in each service.
-
-The _copy-common.bat_ file is a simple script to copy this code
-between the services during development.
 
 ## Tests
 
