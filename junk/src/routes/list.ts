@@ -5,7 +5,7 @@ import { Junk } from "../models";
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const junk = await Junk.find({});
+  const junk = await Junk.find({ orderId: undefined });
 
   res.send(junk);
 });
