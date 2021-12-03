@@ -26,7 +26,7 @@ const JunkShow = ({ junk }: Props) => {
         Price: {junk.price}
       </h4>
       {errors}
-      <Button onClick={doRequest}>Purchase</Button>
+      <Button onClick={() => doRequest()}>Purchase</Button>
     </main>
   );
 };

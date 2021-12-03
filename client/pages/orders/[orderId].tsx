@@ -5,6 +5,7 @@ import StripeCheckout from "react-stripe-checkout";
 
 import { Order, CurrentUser } from "../../interfaces";
 import { Heading } from "../../components";
+import { useRequest } from "../../hooks";
 
 interface Props {
   order: Order | null;
@@ -21,6 +22,11 @@ const getMsLeft = (expiresAt: string | undefined) => {
 const OrderShow = (props: Props) => {
   const { order, currentUser } = props;
   const [timeLeft, setTImeLeft] = useState(getMsLeft(order?.expiresAt));
+  const { doRequest, errors } = useRequest({
+    url: "/api/payments",
+    method: "post",
+    body: { orderId: order?.id },
+  });
 
   useEffect(() => {
     const findTImeLeft = () => {
@@ -46,8 +52,9 @@ const OrderShow = (props: Props) => {
           ? `${timeLeft} seconds until order expires.`
           : "Order expired"}
       </p>
+      {errors}
       <StripeCheckout
-        token={(token) => console.log(token)}
+        token={({ id }) => doRequest({ token: id })}
         stripeKey={process.env.NEXT_PUBLIC_STRIPE_KEY!}
         amount={(order?.junk.price || 0) * 100}
         email={currentUser.email}
