@@ -50,9 +50,6 @@ The common directory contains common code in a module that is shared
 between all back end services. This approach allows for easy code
 reuse, without having to rewrite the implementation in each service.
 
-The _copy-common.bat_ file is a simple script to copy this code
-between the services during development.
-
 ## Tests
 
 The back end was the focus of this project, so all back end services
