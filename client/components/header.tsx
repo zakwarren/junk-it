@@ -10,6 +10,8 @@ export const Header = ({ currentUser }: Props) => {
   const links = [
     !currentUser && { label: "Sign Up", href: "/auth/signup" },
     !currentUser && { label: "Sign In", href: "/auth/signin" },
+    currentUser && { label: "My Orders", href: "/orders" },
+    currentUser && { label: "Sell your junk", href: "/junk/new" },
     currentUser && { label: "Sign Out", href: "/auth/signout" },
   ]
     .filter(Boolean)
