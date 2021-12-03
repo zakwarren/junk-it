@@ -12,7 +12,8 @@
   "scripts": {
     "clean": "del-cli ./build/*",
     "prebuild": "npm run clean",
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "microservice",
