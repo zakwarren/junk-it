@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Router from "next/router";
 import { AppContext } from "next/app";
 import { AxiosInstance } from "axios";
 import StripeCheckout from "react-stripe-checkout";
@@ -26,6 +27,7 @@ const OrderShow = (props: Props) => {
     url: "/api/payments",
     method: "post",
     body: { orderId: order?.id },
+    onSuccess: () => Router.push("/orders"),
   });
 
   useEffect(() => {
