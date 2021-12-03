@@ -16,6 +16,12 @@ spec:
         - name: client
           image: junkit-client
           imagePullPolicy: Never
+          env:
+            - name: NEXT_PUBLIC_STRIPE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: client-secret
+                  key: STRIPE_KEY
 ---
 apiVersion: v1
 kind: Service

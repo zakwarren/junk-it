@@ -49,6 +49,10 @@ const AppComponent = ({ Component, pageProps, currentUser }: Props) => (
 AppComponent.getInitialProps = async (
   appContext: AppContext
 ): Promise<InitialProps> => {
+  if (!process.env.NEXT_PUBLIC_STRIPE_KEY) {
+    throw new Error("NEXT_PUBLIC_STRIPE_KEY should be defined");
+  }
+
   let pageProps = {};
   let currentUser = null;
   const client = buildClient(appContext.ctx);
