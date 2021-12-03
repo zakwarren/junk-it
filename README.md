@@ -7,7 +7,7 @@ microservices architecture. The client is a Nextjs React app
 and the back end services are all Node Express apps.
 
 It is designed to be deployed using docker images in a kubernetes
-cluster.
+cluster. It makes use of github actions for its CI/CD pipeline.
 
 ## Start
 
