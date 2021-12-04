@@ -40,6 +40,13 @@ const AppComponent = ({ Component, pageProps, currentUser }: Props) => (
         href="/favicon-16x16.png"
       />
       <link rel="manifest" href="/site.webmanifest" />
+      <link type="text/plain" rel="author" href="/humans.txt" />
+      <meta name="theme-color" content="#5b21b6" />
+      <meta
+        name="description"
+        content="An e-commerce app for the exchange of junk, built using a microservices architecture."
+      />
+      <title>Junk-It</title>
     </Head>
     <Header currentUser={currentUser} />
     <Component {...pageProps} currentUser={currentUser} />

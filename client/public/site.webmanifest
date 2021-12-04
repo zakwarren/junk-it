@@ -1,6 +1,7 @@
 {
   "name": "Junk-It",
   "short_name": "junk-it",
+  "description": "An e-commerce app for the exchange of junk, built using a microservices architecture.",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +14,12 @@
       "type": "image/png"
     }
   ],
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "any",
+  "dir": "ltr",
+  "lang": "en-GB",
+  "display": "standalone",
   "theme_color": "#5b21b6",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "background_color": "#ffffff"
 }
