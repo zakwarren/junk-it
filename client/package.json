@@ -6,8 +6,10 @@
   "license": "BSD-3-Clause",
   "main": "index.js",
   "scripts": {
+    "start": "next build",
     "dev": "next",
-    "build": "docker build -t junkit-client ."
+    "build": "docker build -f dockerfile.dev -t junkit-client .",
+    "deploy": "docker build -t junkit-client ."
   },
   "keywords": [
     "microservice",
