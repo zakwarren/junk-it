@@ -21,7 +21,7 @@
     "@types/react": "^17.0.34",
     "autoprefixer": "^10.4.0",
     "axios": "^0.21.4",
-    "next": "^11.1.2",
+    "next": "^13.0.3",
     "postcss": "^8.3.11",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
